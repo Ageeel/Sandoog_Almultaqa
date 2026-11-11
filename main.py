@@ -18,8 +18,8 @@ total_fridays = (today - START_DATE).days // 7
 def get_d(file):
 	if os.path.exists(file):
 		with open(file, "r", encoding="utf-8") as f:
-			data = json.load(f)
-	return data
+			return json.load(f)
+	return {}
 
 def main(page: ft.Page):
     state = AppState(page)
@@ -338,7 +338,7 @@ def main(page: ft.Page):
         except Exception:
             pass
 
-        def fetch_data():
+        def _fetch_data():
             nonlocal all_data, is_offline
             try:
                 res = requests.get(DB_URL, timeout=5)
@@ -362,6 +362,21 @@ def main(page: ft.Page):
                 page.update()
             except Exception:
                 pass
+
+        def fetch_data():
+            # يعرض أي خطأ على الشاشة بدل الشاشة البيضاء
+            try:
+                _fetch_data()
+            except Exception:
+                import traceback
+                loading_overlay.visible = False
+                members_list.controls = [
+                    ft.Text(traceback.format_exc(), color="red", size=11, selectable=True)
+                ]
+                try:
+                    page.update()
+                except Exception:
+                    pass
 
         threading.Thread(target=fetch_data, daemon=True).start()
 
@@ -558,4 +573,4 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(target=main, assets_dir="assets")
+    ft.app(target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER, port=1111)
