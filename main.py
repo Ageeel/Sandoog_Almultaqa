@@ -3,10 +3,16 @@ import requests
 import json
 import threading
 import os
-from core.state import AppState
-from core import theme
 from datetime import datetime
-from notifications import get_notifications_view, build_notification_icon
+import traceback
+
+_startup_error = None
+try:
+    from core.state import AppState
+    from core import theme
+    from notifications import get_notifications_view, build_notification_icon
+except Exception:
+    _startup_error = traceback.format_exc()
 
 # --- الثوابت ---
 DB_URL = "https://satine-2f698-default-rtdb.firebaseio.com/sub.json"
@@ -572,5 +578,18 @@ def main(page: ft.Page):
         load_data()
 
 
-if __name__ == "__main__":
-    ft.app(target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER, port=1111)
+def safe_main(page: ft.Page):
+    # يعرض أي خطأ بدء التشغيل على الشاشة بدل الشاشة البيضاء
+    page.bgcolor = "white"
+    if _startup_error:
+        page.add(ft.SafeArea(ft.Text(_startup_error, color="red", size=11, selectable=True)))
+        return
+    try:
+        main(page)
+    except Exception:
+        page.add(ft.SafeArea(ft.Text(traceback.format_exc(), color="red", size=11, selectable=True)))
+        page.update()
+
+
+# مهم: بدون view وport حتى يعمل داخل APK
+ft.app(target=safe_main, assets_dir="assets")
