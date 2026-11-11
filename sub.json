@@ -1,0 +1,142 @@
+{
+  "-Oxvbfe3NZOiqv63kPqI": {
+    "amount": 12000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "محي الدين الهادي",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 11
+  },
+  "-Oy44ysj7ndar78bovP_": {
+    "amount": 12000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "أحمد محمد",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 11
+  },
+  "-Oy93_VqGL7STgP9hlk1": {
+    "amount": 12000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "مبارك أمين",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 11
+  },
+  "-OzNM862bomxTcYT6K97": {
+    "amount": 12000,
+    "contact":"",
+    "img": "user.png",
+    "m": 1,
+    "name": "عبد القادر سراج",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 11
+  },
+  "u_1": {
+    "amount": 12000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عبد المنعم يعقوب",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 11
+  },
+  "u_2": {
+    "amount": 9000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "مدثر عبد القادر",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 8
+  },
+  "u_3": {
+    "amount": 12000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "محمد أحمد",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 11
+  },
+  "u_4": {
+    "amount": 11000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "الصادق إمام",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 10
+  },
+  "u_5": {
+    "amount": 10000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عبد العزيز أبو القاسم",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 9
+  },
+  "u_6": {
+    "amount": 0,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عبد القادر صديق",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": -1
+  },
+  "u_7": {
+    "amount": 0,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "محبوب عبد الرؤوف",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": -1
+  },
+  "u_8": {
+    "amount": 3000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عبد القادر آدم",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 2
+  },
+  "u_9": {
+    "amount": 8000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عقيل محمد",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 7
+  },
+  "u_10": {
+    "amount": 4000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "متوكل صديق",
+    "ret": false,
+    "start_date": "2026-08-21",
+    "total_paid": 3
+  }
+}

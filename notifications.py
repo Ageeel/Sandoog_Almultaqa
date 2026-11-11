@@ -3,47 +3,55 @@ import json
 import os
 import requests
 import threading
+from core import theme
+from core.languages import Language
 
 # --- Global Configurations ---
-BG_COLOR = "#0D0D0D" #color
-CARD_COLOR = "#1A1A1A"
-ACCENT_GREEN = ft.colors.LIME_600
-TEXT_COLOR = ft.colors.GREY_200
-FIREBASE_URL = "https://alwafa-afcc1-default-rtdb.firebaseio.com/noti.json"
+FIREBASE_URL = "https://satine-2f698-default-rtdb.firebaseio.com/noti.json"
 NOTIFICATIONS_FILE = "notifications.json"
 COUNT_FILE = "last_count.json"
 
+
+def get_loc(page: ft.Page) -> Language:
+    """Reads the persisted language choice so this screen matches the main view."""
+    try:
+        saved = page.client_storage.get("lang") or "ar"
+    except Exception:
+        saved = "ar"
+    return Language(saved)
+
+
 class NotificationCard(ft.Container):
     """Encapsulates the notification card layout, styling, and external image launcher."""
-    def __init__(self, page: ft.Page, text: str, amount: float, noti_type: str, date: str, bank, img_url: str = None):
+    def __init__(self, page: ft.Page, loc: Language, text: str, amount: float, noti_type: str, date: str, bank, img_url: str = None):
         self.page = page
-        
+
         # Configure icon and color based on notification type
         config = {
-            "w": {"text": f"سحب {amount:,.0f}", "color": "#c94559", "icon": ft.icons.CALL_MADE},
-            "d": {"text": f"إيداع {amount:,.0f}", "color": ACCENT_GREEN, "icon": ft.icons.CALL_RECEIVED},
-            "don": {"text": f"تبرع بمبلغ {amount:,.0f}", "color": ft.colors.TEAL_100, "icon": ft.icons.MONETIZATION_ON},
-            "s": {"text": "مشترك جديد", "color": "#79a995", "icon": ft.icons.PERSON_ADD_ALT_1},
-            "u": {"text": "إنسحاب مشترك", "color": "#e56328", "icon": ft.icons.PERSON_REMOVE_ALT_1}
-        }.get(noti_type, {"text": "إشعار عام", "color": "#BDBDBD", "icon": ft.icons.NOTIFICATIONS_OUTLINED})
+            "w": {"text": loc.t("notif_withdraw", amount=f"{amount:,.0f}"), "color": theme.DANGER, "chip": theme.DANGER_SOFT, "icon": ft.icons.CALL_MADE_ROUNDED},
+            "d": {"text": loc.t("notif_deposit", amount=f"{amount:,.0f}"), "color": theme.PRIMARY_DARK, "chip": theme.PRIMARY_SOFT, "icon": ft.icons.CALL_RECEIVED_ROUNDED},
+            "don": {"text": loc.t("notif_donation", amount=f"{amount:,.0f}"), "color": theme.GOLD_DARK, "chip": theme.GOLD_SOFT, "icon": ft.icons.MONETIZATION_ON_ROUNDED},
+            "s": {"text": loc.t("notif_new_sub"), "color": theme.PRIMARY_DARK, "chip": theme.PRIMARY_SOFT, "icon": ft.icons.PERSON_ADD_ALT_1_ROUNDED},
+            "u": {"text": loc.t("notif_unsub"), "color": theme.GOLD_DARK, "chip": theme.GOLD_SOFT, "icon": ft.icons.PERSON_REMOVE_ALT_1_ROUNDED}
+        }.get(noti_type, {"text": loc.t("notif_general"), "color": theme.TEXT_SECONDARY, "chip": theme.SURFACE_ALT, "icon": ft.icons.NOTIFICATIONS_OUTLINED})
 
         # Main layout elements: Title and Notification text first
         card_columns = [
-            ft.Text(config["text"], color=TEXT_COLOR, weight=ft.FontWeight.BOLD, size=15),
-            ft.Text(text, color="#9E9E9E", size=14)
+            ft.Text(config["text"], color=theme.TEXT_PRIMARY, weight=ft.FontWeight.BOLD, size=15),
+            ft.Text(text, color=theme.TEXT_SECONDARY, size=14)
         ]
 
         # Verify if img_url is valid and non-empty string
         if img_url and isinstance(img_url, str) and img_url.strip():
             # check if the image is bank notification or not
             if bank == True:
-            	img_text = "إشعار بنكك"
-            	img_txt_col = ft.colors.LIME_600
-            	img_icon = "check_circle"
+                img_text = loc.t("bank_notif")
+                img_txt_col = theme.PRIMARY_DARK
+                img_icon = "check_circle"
             else:
-            	img_text = "أفتح الصورة"
-            	img_txt_col = ft.colors.ORANGE_100
-            	img_icon = "image"
+                img_text = loc.t("view_image")
+                img_txt_col = theme.GOLD_DARK
+                img_icon = "image"
             # Compact "Bankak Notification" button with explicit icon size control
             view_img_btn = ft.TextButton(
                 content=ft.Row(
@@ -61,27 +69,28 @@ class NotificationCard(ft.Container):
             )
             card_columns.append(
                 ft.Container(
-                    content=view_img_btn, 
+                    content=view_img_btn,
                     margin=ft.margin.only(top=2, bottom=2)
                 )
             )
 
         # Append the date at the very bottom
-        card_columns.append(ft.Text("في يوم " + date, color="#707070", size=11))
+        card_columns.append(ft.Text(loc.t("on_day", date=date), color=theme.TEXT_MUTED, size=11))
 
         super().__init__(
-            padding=ft.padding.only(right=10, left=10, top=10, bottom=15),
-            bgcolor=CARD_COLOR,
-            border_radius=15,
+            padding=ft.padding.only(right=12, left=12, top=12, bottom=15),
+            bgcolor=theme.SURFACE,
+            border_radius=16,
+            border=ft.border.all(1, theme.BORDER),
             margin=ft.margin.only(bottom=10)
         )
-        
+
         self.content = ft.Row(
             controls=[
                 ft.Container(
-                    content=ft.Icon(config["icon"], color=config["color"], size=22),
+                    content=ft.Icon(config["icon"], color=config["color"], size=20),
                     padding=10,
-                    bgcolor="#323232",
+                    bgcolor=config["chip"],
                     border_radius=12
                 ),
                 ft.Column(
@@ -101,6 +110,7 @@ class NotificationCard(ft.Container):
             self.page.launch_url(url)
         except Exception:
             pass
+
 
 class NotificationManager:
     """Handles data fetching, sorting, and local storage management using requests."""
@@ -134,7 +144,7 @@ class NotificationManager:
                     sorted_items.append(data[key])
         elif data and isinstance(data, list):
             sorted_items = list(reversed([item for item in data if item]))
-            
+
         return sorted_items
 
     def send_notification(self, text: str, amount: float, noti_type: str, date: str, img_url: str = None) -> bool:
@@ -161,7 +171,7 @@ class NotificationManager:
             current_count = len(res) if res else 0
         except Exception:
             current_count = 0
-            
+
         saved_count = 0
         if os.path.exists(self.count_path):
             try:
@@ -171,18 +181,20 @@ class NotificationManager:
                         saved_count = json.loads(content)
             except (json.JSONDecodeError, ValueError):
                 saved_count = 0
-                
+
         return current_count > saved_count
+
 
 class NotificationViewManager:
     """Manages the UI creation and thread handling for the notifications screen."""
     def __init__(self, page: ft.Page):
         self.page = page
+        self.loc = get_loc(page)
         self.manager = NotificationManager()
         self.notif_list = ft.ListView(expand=True, spacing=0)
-        self.loading_ring = ft.ProgressRing(color=ft.colors.ORANGE_600)
+        self.loading_ring = ft.ProgressRing(color=theme.PRIMARY)
         self.loading_container = ft.Container(content=self.loading_ring, alignment=ft.alignment.center, expand=True)
-        self.view = ft.View("/notifications", bgcolor=BG_COLOR, padding=20, controls=[self.loading_container])
+        self.view = ft.View("/notifications", bgcolor=theme.BG, padding=20, controls=[self.loading_container])
 
     def build_view(self) -> ft.View:
         threading.Thread(target=self._load_data_thread, daemon=True).start()
@@ -191,13 +203,14 @@ class NotificationViewManager:
     def _load_data_thread(self):
         total_deposit = 0
         total_withdraw = 0
-        
+
         items = self.manager.fetch_sorted_notifications()
-        
+
         for item in items:
             self.notif_list.controls.append(
                 NotificationCard(
                     page=self.page,
+                    loc=self.loc,
                     text=item.get('noti', ''),
                     amount=item.get('amount', 0),
                     noti_type=item.get('type', ''),
@@ -210,38 +223,38 @@ class NotificationViewManager:
                 total_deposit += item.get("amount", 0)
             elif item.get("type") == "w":
                 total_withdraw += item.get("amount", 0)
-        
+
         header = ft.Container(
             gradient=ft.LinearGradient(
-                begin=ft.alignment.bottom_left, 
-                end=ft.alignment.top_right, 
-                colors=["#211111", "#222822"]
+                begin=ft.alignment.top_left,
+                end=ft.alignment.bottom_right,
+                colors=theme.GRADIENT_HEADER
             ),
             content=ft.Row([
                 ft.Column([
-                    ft.Text("إجمالي الودائع", color=ACCENT_GREEN, size=14), 
-                    ft.Text(f"{total_deposit:,.0f}", color=ACCENT_GREEN, size=20, weight=ft.FontWeight.BOLD)
+                    ft.Text(self.loc.t("total_deposits"), color=theme.ON_HEADER_MUTED, size=14),
+                    ft.Text(f"{total_deposit:,.0f}", color=theme.ON_HEADER, size=20, weight=ft.FontWeight.BOLD)
                 ], expand=True, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
-                ft.VerticalDivider(width=1, color="#333333"),
+                ft.VerticalDivider(width=1, color=ft.colors.with_opacity(0.25, ft.colors.WHITE)),
                 ft.Column([
-                    ft.Text("إجمالي السحب", color="#c94559", size=14), 
-                    ft.Text(f"{total_withdraw:,.0f}", color="#c94559", size=20, weight=ft.FontWeight.BOLD)
+                    ft.Text(self.loc.t("total_withdrawals"), color=theme.ON_HEADER_MUTED, size=14),
+                    ft.Text(f"{total_withdraw:,.0f}", color=theme.ON_HEADER, size=20, weight=ft.FontWeight.BOLD)
                 ], expand=True, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
-            ]), 
-            padding=20, 
-            bgcolor=CARD_COLOR, 
-            border_radius=20, 
-            margin=ft.margin.only(top=30)
+            ]),
+            padding=20,
+            border_radius=20,
+            margin=ft.margin.only(top=30, bottom=15)
         )
-        
+
         self.view.controls = [header, self.notif_list]
         self.view.floating_action_button = ft.FloatingActionButton(
-            icon=ft.icons.ARROW_FORWARD, 
-            bgcolor=ft.colors.ORANGE_600, 
-            on_click=lambda _: self.page.go("/"), 
+            icon=ft.icons.ARROW_FORWARD,
+            bgcolor=theme.PRIMARY,
+            on_click=lambda _: self.page.go("/"),
             width=40, height=40
         )
         self.page.update()
+
 
 # --- Helper Functions for External Usage ---
 def get_notifications_view(page: ft.Page):
@@ -249,21 +262,22 @@ def get_notifications_view(page: ft.Page):
     view_manager = NotificationViewManager(page)
     return view_manager.build_view()
 
+
 def build_notification_icon(page: ft.Page):
     """Generates the notification button with a dynamic unread badge."""
     manager = NotificationManager()
     has_new = manager.check_new_notifications()
-    
+
     return ft.Stack([
         ft.IconButton(
             icon=ft.icons.NOTIFICATIONS,
-            icon_color=ft.colors.GREY_400, 
+            icon_color=theme.ON_HEADER_MUTED,
             on_click=lambda _: page.go("/notifications")
         ),
         ft.Container(
-            content=ft.CircleAvatar(bgcolor=ft.colors.RED, radius=5), 
-            visible=has_new, 
-            top=5, 
+            content=ft.CircleAvatar(bgcolor=theme.DANGER, radius=5),
+            visible=has_new,
+            top=5,
             right=5
         )
     ])
