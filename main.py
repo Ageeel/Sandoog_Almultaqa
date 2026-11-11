@@ -81,15 +81,16 @@ def main(page: ft.Page):
     progress_bar = ft.ProgressBar(
         value=0, color=theme.PRIMARY_LIGHT,
         bgcolor=ft.colors.with_opacity(0.22, ft.colors.WHITE),
-        height=8, border_radius=10
+        height=8
     )
+    progress_clip = ft.Container(content=progress_bar, border_radius=10, clip_behavior=ft.ClipBehavior.ANTI_ALIAS)
     progress_label = ft.Text("0%", size=12, color=theme.ON_HEADER, weight="bold")
     progress_title = ft.Text(state.loc.t("progress"), size=12, color=theme.ON_HEADER_MUTED)
     progress_row = ft.Column(
         spacing=4,
         controls=[
             ft.Row([progress_title, progress_label], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-            progress_bar,
+            progress_clip,
         ]
     )
 
