@@ -10,7 +10,7 @@ from notifications import get_notifications_view, build_notification_icon
 
 # --- الثوابت ---
 DB_URL = "https://satine-2f698-default-rtdb.firebaseio.com/sub.json"
-START_DATE = datetime(2026, 8, 14)
+START_DATE = datetime(2026, 8, 21)
 today = datetime.now()
 total_fridays = (today - START_DATE).days // 7
 
