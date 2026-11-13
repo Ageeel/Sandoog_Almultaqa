@@ -1,4 +1,4 @@
-name: Build Flet APK
+name: Build Flet APK (v0.19.0)
 
 on:
   push:
@@ -29,7 +29,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # لا نثبّت Flutter هنا: flet build ينزّل النسخة المطابقة لإصدار Flet تلقائياً
       - name: Build APK
         run: |
           flet build apk --product "صندوق الملتقى"
