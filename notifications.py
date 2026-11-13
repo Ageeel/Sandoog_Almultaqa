@@ -211,7 +211,7 @@ class NotificationViewManager:
                 NotificationCard(
                     page=self.page,
                     loc=self.loc,
-                    text=item.get('noti', ''),
+                    text=item.get('noti', '') if self.page.client_storage.get("lang") == "ar" else item.get("en_noti"),
                     amount=item.get('amount', 0),
                     noti_type=item.get('type', ''),
                     date=item.get('date', ''),

@@ -3,20 +3,14 @@ import requests
 import json
 import threading
 import os
+from core.state import AppState
+from core import theme
 from datetime import datetime
-import traceback
-
-_startup_error = None
-try:
-    from core.state import AppState
-    from core import theme
-    from notifications import get_notifications_view, build_notification_icon
-except Exception:
-    _startup_error = traceback.format_exc()
+from notifications import get_notifications_view, build_notification_icon
 
 # --- الثوابت ---
 DB_URL = "https://satine-2f698-default-rtdb.firebaseio.com/sub.json"
-START_DATE = datetime(2026, 8, 21)
+START_DATE = datetime(2026, 6, 12)
 today = datetime.now()
 total_fridays = (today - START_DATE).days // 7
 
@@ -24,8 +18,8 @@ total_fridays = (today - START_DATE).days // 7
 def get_d(file):
 	if os.path.exists(file):
 		with open(file, "r", encoding="utf-8") as f:
-			return json.load(f)
-	return {}
+			data = json.load(f)
+	return data
 
 def main(page: ft.Page):
     state = AppState(page)
@@ -81,16 +75,15 @@ def main(page: ft.Page):
     progress_bar = ft.ProgressBar(
         value=0, color=theme.PRIMARY_LIGHT,
         bgcolor=ft.colors.with_opacity(0.22, ft.colors.WHITE),
-        height=8
+        height=8, border_radius=10
     )
-    progress_clip = ft.Container(content=progress_bar, border_radius=10, clip_behavior=ft.ClipBehavior.ANTI_ALIAS)
     progress_label = ft.Text("0%", size=12, color=theme.ON_HEADER, weight="bold")
     progress_title = ft.Text(state.loc.t("progress"), size=12, color=theme.ON_HEADER_MUTED)
     progress_row = ft.Column(
         spacing=4,
         controls=[
             ft.Row([progress_title, progress_label], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
-            progress_clip,
+            progress_bar,
         ]
     )
 
@@ -298,7 +291,7 @@ def main(page: ft.Page):
                                     border_radius=50,
                                     padding=2
                                 ),
-                                title_text=val.get("name", state.loc.t("unknown_name")),
+                                title_text=val.get("name", state.loc.t("unknown_name")) if state.loc.lang == "ar" else val.get("en_name", state.loc.t("unknown_name")),
                                 title_color=theme.TEXT_PRIMARY,
                                 subtitle_text=status_text,
                                 subtitle_color=theme.TEXT_SECONDARY,
@@ -345,7 +338,7 @@ def main(page: ft.Page):
         except Exception:
             pass
 
-        def _fetch_data():
+        def fetch_data():
             nonlocal all_data, is_offline
             try:
                 res = requests.get(DB_URL, timeout=5)
@@ -369,21 +362,6 @@ def main(page: ft.Page):
                 page.update()
             except Exception:
                 pass
-
-        def fetch_data():
-            # يعرض أي خطأ على الشاشة بدل الشاشة البيضاء
-            try:
-                _fetch_data()
-            except Exception:
-                import traceback
-                loading_overlay.visible = False
-                members_list.controls = [
-                    ft.Text(traceback.format_exc(), color="red", size=11, selectable=True)
-                ]
-                try:
-                    page.update()
-                except Exception:
-                    pass
 
         threading.Thread(target=fetch_data, daemon=True).start()
 
@@ -548,7 +526,7 @@ def main(page: ft.Page):
             ft.View(
                 "/",
                 bgcolor=theme.BG,
-                padding=ft.padding.only(top=50, left=15, right=15),
+                padding=ft.padding.only(top=42, left=15, right=15),
                 controls=[ft.Stack(expand=True, controls=[ft.Column([header, tools_section, search_field, members_list], spacing=12), loading_overlay, onboarding_container])],
                 floating_action_button=refresh_button
             )
@@ -579,18 +557,5 @@ def main(page: ft.Page):
         load_data()
 
 
-def safe_main(page: ft.Page):
-    # يعرض أي خطأ بدء التشغيل على الشاشة بدل الشاشة البيضاء
-    page.bgcolor = "white"
-    if _startup_error:
-        page.add(ft.SafeArea(ft.Text(_startup_error, color="red", size=11, selectable=True)))
-        return
-    try:
-        main(page)
-    except Exception:
-        page.add(ft.SafeArea(ft.Text(traceback.format_exc(), color="red", size=11, selectable=True)))
-        page.update()
-
-
-# مهم: بدون view وport حتى يعمل داخل APK
-ft.app(target=safe_main, assets_dir="assets")
+if __name__ == "__main__":
+    ft.app(target=main, assets_dir="assets")

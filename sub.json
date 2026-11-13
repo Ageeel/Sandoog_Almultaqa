@@ -1,142 +1,156 @@
 {
   "-Oxvbfe3NZOiqv63kPqI": {
-    "amount": 12000,
+    "amount": 21000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "محي الدين الهادي",
+    "en_name":"Muhyadin Al-Hadi",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 11
+    "start_date": "2026-06-12",
+    "total_paid": 21
   },
   "-Oy44ysj7ndar78bovP_": {
-    "amount": 12000,
+    "amount": 21000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "أحمد محمد",
+    "en_name":"Ahmed Mohammed",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 11
+    "start_date": "2026-06-12",
+    "total_paid": 21
   },
   "-Oy93_VqGL7STgP9hlk1": {
-    "amount": 12000,
+    "amount": 21000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "مبارك أمين",
+    "en_name":"Mubarak Ameen",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 11
+    "start_date": "2026-06-12",
+    "total_paid": 21
   },
   "-OzNM862bomxTcYT6K97": {
-    "amount": 12000,
+    "amount": 21000,
     "contact":"",
     "img": "user.png",
     "m": 1,
     "name": "عبد القادر سراج",
+    "en_name":"Abdelgadir Seraj",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 11
+    "start_date": "2026-06-12",
+    "total_paid": 21
   },
   "u_1": {
-    "amount": 12000,
+    "amount": 21000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "عبد المنعم يعقوب",
+    "en_name":"Abdelmuniem Ya'gub",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 11
+    "start_date": "2026-06-12",
+    "total_paid": 21
   },
   "u_2": {
-    "amount": 9000,
+    "amount": 18000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "مدثر عبد القادر",
+    "en_name":"Mudathir Abdelgadir",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 8
+    "start_date": "2026-06-12",
+    "total_paid": 18
   },
   "u_3": {
-    "amount": 12000,
+    "amount": 21000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "محمد أحمد",
+    "en_name":"Mohammed Ahmed",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 11
+    "start_date": "2026-06-12",
+    "total_paid": 21
   },
   "u_4": {
-    "amount": 11000,
+    "amount": 20000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "الصادق إمام",
+    "en_name":"Assadig Emam",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 10
+    "start_date": "2026-06-12",
+    "total_paid": 20
   },
   "u_5": {
-    "amount": 10000,
+    "amount": 19000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "عبد العزيز أبو القاسم",
+    "en_name":"Abdelaziz Abu-algassim",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 9
+    "start_date": "2026-06-12",
+    "total_paid": 19
   },
   "u_6": {
-    "amount": 0,
+    "amount": 9000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "عبد القادر صديق",
+    "en_name":"Abdelgadir Seddig",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": -1
+    "start_date": "2026-06-12",
+    "total_paid": 9
   },
   "u_7": {
-    "amount": 0,
-    "contact": "",
-    "img": "user.png",
-    "m": 1,
-    "name": "محبوب عبد الرؤوف",
-    "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": -1
-  },
-  "u_8": {
-    "amount": 3000,
-    "contact": "",
-    "img": "user.png",
-    "m": 1,
-    "name": "عبد القادر آدم",
-    "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 2
-  },
-  "u_9": {
     "amount": 8000,
     "contact": "",
     "img": "user.png",
     "m": 1,
-    "name": "عقيل محمد",
+    "name": "محبوب عبد الرؤوف",
+    "en_name":"Mahboob Abdelrouf",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 7
+    "start_date": "2026-06-12",
+    "total_paid": 8
+  },
+  "u_8": {
+    "amount": 12000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عبد القادر آدم",
+    "en_name":"Abdelgadir Adam",
+    "ret": false,
+    "start_date": "2026-06-12",
+    "total_paid": 12
+  },
+  "u_9": {
+    "amount": 17000,
+    "contact": "",
+    "img": "user.png",
+    "m": 1,
+    "name": "عقيل محمد",
+    "en_name":"Ageel Mohammed",
+    "ret": false,
+    "start_date": "2026-06-12",
+    "total_paid": 17
   },
   "u_10": {
-    "amount": 4000,
+    "amount": 13000,
     "contact": "",
     "img": "user.png",
     "m": 1,
     "name": "متوكل صديق",
+    "en_name":"Mutwakkil Seddig",
     "ret": false,
-    "start_date": "2026-08-21",
-    "total_paid": 3
+    "start_date": "2026-06-12",
+    "total_paid": 13
   }
 }
