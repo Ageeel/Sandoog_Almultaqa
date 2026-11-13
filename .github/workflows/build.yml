@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,14 +26,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-
+      # لا نثبّت Flutter هنا: flet build ينزّل النسخة المطابقة لإصدار Flet تلقائياً
       - name: Build APK
         run: |
           flet build apk --product "صندوق الملتقى"
